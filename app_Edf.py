@@ -12,32 +12,47 @@ app = Dash(__name__)
 
 # Layout / corps de "app"
 app.layout = html.Div([
-    html.Div(children='Premier élément du app.layout / html.Div'),
+    html.Div(className='row', children='Infos sur les distributeurs et leurs points de livraisons',
+             style={'textAlign': 'center', 'color': 'darkblue', 'fontSize': 30, 'backgroundColor': 'lightblue'}),
+    # classname utilité ?
 
-    html.Hr(),
+    html.Hr(style={'width': '50', "color": "darkblue"}),
+    html.Div(children="Table de base"),
     dash_table.DataTable(data=df.to_dict('records'), page_size=10),  # "records" arguments ? affiche un df
     # dash_table.DataTable(data=df_g.to_dict('records'), page_size=10),
 
     # Bar plot
     html.Hr(),
+    html.Div(children="BarPlot"),
     dcc.Graph(figure=px.histogram(df, x='libelle_region', y='conso', histfunc='sum')),
     dcc.Graph(figure=px.histogram(df_g, x="libelle_grand_secteur", y='conso', histfunc='sum')),
 
     # Pie chart
     html.Hr(),
+    html.Div(children="PieChart"),
     dcc.Graph(figure=px.pie(df, values="conso", names="libelle_grand_secteur", hole=0.1)),
 
+    # Interactif
+    html.Hr(style={'width': '5'}),
+    html.Div(children="Radio & @callback"),
     # Radio Bar plot
     # options_radio
-    html.Hr(style={'width': '5'}),
-    dcc.RadioItems(options=["conso", "pdl", "indqual"], value="conso", id='radio_for_bar'),
+    dcc.RadioItems(options=["conso", "pdl", "indqual"], value="conso",inline=True, id='radio_for_bar'),
     dcc.Graph(figure={}, id='receiver_bar'),
 
     # Radio Pie Chart
-    html.Hr(style={'width': '5'}),
-    dcc.RadioItems(options=["conso", "pdl", "indqual"], value="conso", id="radio_for_pie"),
+    html.Hr(style={'width': '50', "color": "darkblue"}),
+    dcc.RadioItems(options=["conso", "pdl", "indqual"], value="conso",id="radio_for_pie"),
     dcc.Graph(figure={}, id='receiver_pie'),
 
+    # Essai css multiple
+    html.Hr(style={'width': '50', "color": "darkblue"}),
+    html.Div(children="Essai css multiple"),
+
+    html.Div(className="row", children=[
+        html.Div(className="six columns", children=[dash_table.DataTable(data=df.to_dict('records'), page_size=10, style_table={'overflowX': 'auto'}),]),
+        html.Div(className="six columns", children=[dcc.Graph(figure=px.pie(df, values="conso", names="libelle_grand_secteur", hole=0.1))])
+    ])
 ])
 
 
